@@ -1,5 +1,2 @@
 @extends('layouts.app')
-@section('title', 'Order received | Northstar Shop')
-@section('content')
-<div class="panel"><h1>Thank you for your order!</h1><p>Order <strong>{{ $order->order_number }}</strong> has been received.</p><p>Status: {{ ucfirst($order->status) }}</p><h2>Items</h2>@foreach ($order->items as $item)<p>{{ $item->product_name }} × {{ $item->quantity }} — ${{ number_format($item->unit_price_cents * $item->quantity / 100, 2) }}</p>@endforeach<p><strong>Total: ${{ number_format($order->total_cents / 100, 2) }}</strong></p><a class="btn" href="{{ route('store.index') }}">Continue shopping</a></div>
-@endsection
+@section('content')<div class="glass"><span class="eyebrow">Order confirmed</span><h1>Thank you!</h1><p>Order {{ $order->order_number }} · {{ ucfirst($order->status) }}</p><p>Payment: {{ str_replace('_',' ',$order->payment_method) }} ({{ $order->payment_status }})</p>@foreach($order->items as $i)<p>{{ $i->product_name }} × {{ $i->quantity }}</p>@endforeach<p><strong>Total ${{ number_format($order->total_cents/100,2) }}</strong></p><a class="btn" href="{{ route('store.index') }}">Continue shopping</a></div>@endsection

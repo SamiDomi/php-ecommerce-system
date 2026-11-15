@@ -1,17 +1,2 @@
 @extends('layouts.app')
-@section('title', 'Checkout | Northstar Shop')
-@section('content')
-<h1>Checkout</h1><div class="grid" style="grid-template-columns:2fr 1fr">
-<form method="post" action="{{ route('checkout.store') }}" class="panel">@csrf
-<h2>Delivery details</h2>
-<label class="field">Full name<input name="customer_name" value="{{ old('customer_name') }}" required maxlength="160"></label>
-<label class="field">Email<input type="email" name="email" value="{{ old('email') }}" required maxlength="190"></label>
-<label class="field">Phone (optional)<input name="phone" value="{{ old('phone') }}" maxlength="40"></label>
-<label class="field">Street address<input name="address" value="{{ old('address') }}" required maxlength="255"></label>
-<label class="field">City<input name="city" value="{{ old('city') }}" required maxlength="120"></label>
-<label class="field">Postal code<input name="postal_code" value="{{ old('postal_code') }}" required maxlength="30"></label>
-<label class="field">Country<input name="country" value="{{ old('country') }}" required maxlength="100"></label>
-<p class="muted">Payment is not configured; orders are created with pending status. Connect a payment provider before accepting live orders.</p><button>Place order</button>
-</form><aside class="panel"><h2>Order summary</h2>@foreach ($products as $product)<p class="row"><span>{{ $product->name }} × {{ session('cart')[$product->id] }}</span><span>${{ number_format($product->price_cents * session('cart')[$product->id] / 100, 2) }}</span></p>@endforeach<hr><p class="row"><strong>Total</strong><strong>${{ number_format($subtotal / 100, 2) }}</strong></p></aside>
-</div>
-@endsection
+@section('content')<h1>Checkout</h1><div class="checkout"><form class="glass" method="post" action="{{ route('checkout.store') }}">@csrf<h2>Delivery</h2>@foreach(['customer_name'=>'Full name','email'=>'Email','phone'=>'Phone','address'=>'Address','city'=>'City','postal_code'=>'Postal code','country'=>'Country'] as $name=>$label)<label class="field">{{ $label }}<input name="{{ $name }}" value="{{ old($name,in_array($name,['customer_name','email'])?auth()->user()->{$name}:'' ) }}" @required($name!=='phone')></label>@endforeach<h2>Payment method</h2><label class="field"><select name="payment_method"><option value="cash_on_delivery">Cash on delivery</option><option value="bank_transfer">Bank transfer (manual confirmation)</option></select></label><p class="muted">Demo payment methods are recorded as pending; this app does not process bank or card payments.</p><button>Place order</button></form><aside class="glass"><h2>Summary</h2>@foreach($products as $p)<p class="row"><span>{{ $p->name }} × {{ session('cart')[$p->id] }}</span><span>${{ number_format($p->price_cents*session('cart')[$p->id]/100,2) }}</span></p>@endforeach<hr><strong>Total ${{ number_format($subtotal/100,2) }}</strong></aside></div>@endsection

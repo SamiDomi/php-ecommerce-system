@@ -1,0 +1,2 @@
+@extends('layouts.app')
+@section('content')<div class="glass narrow"><h1>Welcome back</h1><form method="post" action="{{ route('login') }}">@csrf<label class="field">Email<input type="email" name="email" required autocomplete="email"></label><label class="field">Password<input type="password" name="password" required autocomplete="current-password"></label><label><input type="checkbox" name="remember"> Remember me</label><p><button>Log in</button></p></form><a href="{{ route('register') }}">Create account</a></div>@endsection

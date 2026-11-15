@@ -1,0 +1,2 @@
+@extends('layouts.app')
+@section('content')<h1>My orders</h1>@forelse($orders as $o)<article class="glass order"><div class="row"><strong>{{ $o->order_number }}</strong><span>{{ ucfirst($o->status) }} · {{ str_replace('_',' ',$o->payment_method) }}</span></div>@foreach($o->items as $i)<p>{{ $i->product_name }} × {{ $i->quantity }} — ${{ number_format($i->unit_price_cents*$i->quantity/100,2) }}</p>@endforeach<p><strong>Total ${{ number_format($o->total_cents/100,2) }}</strong></p></article>@empty<p>No orders yet.</p>@endforelse{{ $orders->links() }}@endsection
